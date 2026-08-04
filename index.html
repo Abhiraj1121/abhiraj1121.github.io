@@ -157,6 +157,11 @@
   .link-btn.primary{
     background:linear-gradient(135deg,var(--violet),#5b3fe0);
     border-color:transparent;
+    animation:btnGlow 3s ease-in-out 1.3s infinite;
+  }
+  @keyframes btnGlow{
+    0%,100%{ box-shadow:0 0 0 0 rgba(139,92,246,0); }
+    50%{ box-shadow:0 0 0 6px rgba(139,92,246,0.08); }
   }
 
   /* ---------- SECTION LABEL ---------- */
@@ -290,6 +295,68 @@
     color:var(--muted);
     font-size:0.85rem;
   }
+
+  /* ---------- ENTRANCE ANIMATIONS ---------- */
+  @keyframes fadeSlideUp{
+    from{ opacity:0; transform:translateY(28px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes popIn{
+    from{ opacity:0; transform:scale(0.85) translateY(20px); }
+    to{ opacity:1; transform:scale(1) translateY(0); }
+  }
+  @keyframes avatarSpin{
+    from{ opacity:0; transform:rotateY(90deg) scale(0.6); }
+    to{ opacity:1; transform:rotateY(0deg) scale(1); }
+  }
+  @keyframes glowPulse{
+    0%,100%{ opacity:0.85; text-shadow:0 0 8px rgba(76,111,255,0.3); }
+    50%{ opacity:1; text-shadow:0 0 16px rgba(240,180,41,0.5); }
+  }
+  @keyframes underlineGrow{
+    from{ width:0; }
+    to{ width:60px; }
+  }
+  @keyframes blink{
+    0%,100%{ opacity:1; }
+    50%{ opacity:0; }
+  }
+  @keyframes floatY{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-6px); }
+  }
+
+  .avatar{ animation:avatarSpin 0.9s cubic-bezier(.2,.8,.2,1) both, floatY 4.5s ease-in-out 1.2s infinite; }
+  .eyebrow{ animation:fadeSlideUp .7s ease .15s both, glowPulse 3.5s ease-in-out 2s infinite; }
+  h1{ animation:fadeSlideUp .8s ease .28s both; }
+  .tagline-wrap{ animation:fadeSlideUp .8s ease .4s both; min-height:3.4em; }
+  .links{ animation:fadeSlideUp .8s ease .95s both; }
+
+  .typed-cursor{
+    display:inline-block;
+    width:2px;
+    background:var(--coral);
+    margin-left:2px;
+    animation:blink .8s step-end infinite;
+  }
+
+  .section-label{ opacity:0; }
+  .section-label.in-view{ animation:fadeSlideUp .7s ease both; }
+  .section-label h2::after{
+    content:'';
+    display:block;
+    height:2px;
+    width:0;
+    margin:10px auto 0;
+    background:linear-gradient(90deg,var(--coral),var(--violet));
+    animation:underlineGrow .8s ease .3s forwards;
+  }
+
+  .card{ opacity:0; }
+  .card.in-view{ animation:popIn .65s cubic-bezier(.2,.8,.2,1) both; }
+
+  footer{ opacity:0; }
+  footer.in-view{ animation:fadeSlideUp .7s ease both; }
 </style>
 </head>
 <body>
@@ -306,11 +373,7 @@
     </div>
     <div class="eyebrow">Software Developer · AI Systems</div>
     <h1>Abhiraj</h1>
-    <p class="tagline">
-      Building the <b>EkaDev</b> ecosystem — a family of tools spanning intelligent
-      web platforms, agentic workflows, and developer tooling. Creator of <b>Cognix</b>,
-      focused on practical AI-driven software that ships.
-    </p>
+    <p class="tagline tagline-wrap"><span id="typedText"></span><span class="typed-cursor" id="typedCursor">&nbsp;</span></p>
     <div class="links">
       <a class="link-btn primary" href="https://github.com/Abhiraj1121" target="_blank" rel="noopener">
         ★ GitHub
@@ -378,7 +441,52 @@ function draw(time){
 }
 requestAnimationFrame(draw);
 
-// ---------- Card data ----------
+// ---------- Typing animation for tagline ----------
+(function(){
+  const el = document.getElementById('typedText');
+  const cursor = document.getElementById('typedCursor');
+  const html = `Building the <b>EkaDev</b> ecosystem — a family of tools spanning intelligent web platforms, agentic workflows, and developer tooling. Creator of <b>Cognix</b>, focused on practical AI-driven software that ships.`;
+  // tokenize into tags vs characters so bold segments type correctly
+  const tokens = html.match(/<[^>]+>|./gs) || [];
+  let i = 0;
+  function type(){
+    if(i < tokens.length){
+      el.innerHTML += tokens[i];
+      i++;
+      const delay = 10 + Math.random()*20;
+      setTimeout(type, delay);
+    } else {
+      cursor.style.animation = 'blink .8s step-end infinite';
+    }
+  }
+  setTimeout(type, 950); // start after header entrance animations settle
+})();
+
+// ---------- Scroll-triggered reveal (staggered) ----------
+(function(){
+  const sectionLabel = document.querySelector('.section-label');
+  const footerEl = document.querySelector('footer');
+  const cards = () => Array.from(document.querySelectorAll('.card'));
+
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        if(entry.target.classList.contains('card')){
+          const idx = cards().indexOf(entry.target);
+          entry.target.style.animationDelay = `${idx * 0.08}s`;
+        }
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  observer.observe(sectionLabel);
+  observer.observe(footerEl);
+  // cards observed after they're injected, see below
+  window.__revealObserver = observer;
+})();
+
 const projects = [
   {name:"About EkaDev", desc:"EkaDev ecosystem overview and documentation.", path:"/aboutekadev/", url:"https://abhiraj1121.github.io/aboutekadev", icon:"E", c1:"#8b5cf6", c2:"#4c6fff", img:"photo/aboutekadev.jpg"},
   {name:"Eka", desc:"Eka core web platform and interfaces.", path:"/eka/", url:"https://abhiraj1121.github.io/eka", icon:"K", c1:"#4c6fff", c2:"#8b5cf6", img:"photo/eka.jpg"},
@@ -415,6 +523,7 @@ projects.forEach(p=>{
     </div>
   `;
   grid.appendChild(a);
+  if(window.__revealObserver) window.__revealObserver.observe(a);
 
   // try loading the thumbnail; show it only if it actually exists
   const imgEl = a.querySelector('.card-icon img');
