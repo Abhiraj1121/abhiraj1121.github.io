@@ -1,0 +1,37 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="goldCore" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#F0D080"/>
+      <stop offset="70%" stop-color="#C9A84C"/>
+    </radialGradient>
+    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
+      <stop offset="0%" stop-color="#1a1214"/>
+      <stop offset="62%" stop-color="#0C0608"/>
+      <stop offset="100%" stop-color="#060304"/>
+    </radialGradient>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- background -->
+  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
+
+  <!-- outer rings -->
+  <circle cx="256" cy="256" r="190" fill="none" stroke="rgba(201,168,76,0.15)" stroke-width="2"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="rgba(201,168,76,0.25)" stroke-width="2"/>
+
+  <!-- glowing gold core -->
+  <circle cx="256" cy="256" r="100" fill="url(#goldCore)" filter="url(#glow)"/>
+
+  <!-- 4-point star / sparkle emblem -->
+  <g transform="translate(256,256)">
+    <path
+      d="M0 -85 L27.5 -27.5 L85 0 L27.5 27.5 L0 85 L-27.5 27.5 L-85 0 L-27.5 -27.5 Z"
+      fill="#0C0608"/>
+  </g>
+</svg>
