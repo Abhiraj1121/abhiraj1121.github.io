@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abhiraj — EkaDev / Cognix</title>
+<style>
+  :root{
+    --bg:#050508;
+    --bg2:#0a0813;
+    --violet:#8b5cf6;
+    --cyan:#4c6fff;
+    --coral:#f0b429;
+    --text:#eee9f5;
+    --muted:#8f8aa8;
+    --card:rgba(255,255,255,0.03);
+    --border:rgba(255,255,255,0.08);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+  }
+  @font-face{
+    font-family:'SpaceGrotesk';
+    src:local('Space Grotesk');
+  }
+
+  canvas#bgCanvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    opacity:0.9;
+  }
+
+  .noise{
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    opacity:0.025;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap{
+    position:relative;
+    z-index:2;
+    max-width:1200px;
+    margin:0 auto;
+    padding:80px 24px 120px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    margin-bottom:90px;
+  }
+  .avatar{
+    width:112px; height:112px;
+    border-radius:28px;
+    background:linear-gradient(135deg,var(--violet),var(--cyan));
+    display:flex; align-items:center; justify-content:center;
+    font-size:40px; font-weight:700;
+    color:#07080c;
+    margin-bottom:26px;
+    box-shadow:0 20px 60px -10px rgba(124,92,255,0.5), inset 0 0 0 1px rgba(255,255,255,0.2);
+    transform-style:preserve-3d;
+    transition:transform .4s ease;
+    letter-spacing:-1px;
+    overflow:hidden;
+    position:relative;
+  }
+  .avatar img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .avatar span{
+    position:absolute;
+    inset:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .avatar:hover{ transform:rotateY(15deg) rotateX(-8deg) scale(1.05); }
+
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    color:var(--cyan);
+    font-weight:600;
+    margin-bottom:14px;
+    opacity:0.85;
+  }
+  h1{
+    font-size:clamp(2.6rem, 6vw, 4.2rem);
+    font-weight:800;
+    letter-spacing:-2px;
+    line-height:1.05;
+    background:linear-gradient(180deg,#ffffff 20%,#9fa3c0 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin-bottom:18px;
+  }
+  .tagline{
+    max-width:600px;
+    color:var(--muted);
+    font-size:1.05rem;
+    line-height:1.7;
+    margin-bottom:34px;
+  }
+  .tagline b{ color:var(--text); font-weight:600; }
+
+  .links{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .link-btn{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:12px 22px;
+    border-radius:14px;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--text);
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    backdrop-filter:blur(12px);
+    overflow:hidden;
+    transition:transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .3s;
+  }
+  .link-btn::before{
+    content:'';
+    position:absolute; inset:0;
+    background:radial-gradient(140px circle at var(--mx,50%) var(--my,50%), rgba(124,92,255,0.35), transparent 70%);
+    opacity:0;
+    transition:opacity .3s;
+  }
+  .link-btn:hover::before{ opacity:1; }
+  .link-btn:hover{
+    transform:translateY(-3px);
+    border-color:rgba(124,92,255,0.5);
+    box-shadow:0 14px 40px -12px rgba(124,92,255,0.45);
+  }
+  .link-btn.primary{
+    background:linear-gradient(135deg,var(--violet),#5b3fe0);
+    border-color:transparent;
+  }
+
+  /* ---------- SECTION LABEL ---------- */
+  .section-label{
+    text-align:center;
+    margin-bottom:44px;
+  }
+  .section-label .eyebrow{ margin-bottom:10px; }
+  .section-label h2{
+    font-size:1.9rem;
+    font-weight:700;
+    letter-spacing:-0.5px;
+  }
+  .section-label p{
+    color:var(--muted);
+    margin-top:10px;
+    font-size:0.95rem;
+  }
+
+  /* ---------- GRID ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:22px;
+    perspective:1200px;
+  }
+  @media (max-width:920px){
+    .grid{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media (max-width:600px){
+    .grid{ grid-template-columns:1fr; }
+  }
+
+  .card{
+    position:relative;
+    display:block;
+    text-decoration:none;
+    color:var(--text);
+    padding:28px 24px;
+    border-radius:20px;
+    background:var(--card);
+    border:1px solid var(--border);
+    backdrop-filter:blur(16px);
+    transform-style:preserve-3d;
+    transition:transform .15s ease-out, box-shadow .3s ease, border-color .3s ease;
+    min-height:180px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    overflow:hidden;
+    will-change:transform;
+  }
+  .card::before{
+    content:'';
+    position:absolute; inset:0;
+    background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(124,92,255,0.25), transparent 65%);
+    opacity:0;
+    transition:opacity .35s;
+    pointer-events:none;
+  }
+  .card:hover::before{ opacity:1; }
+  .card:hover{
+    border-color:rgba(124,92,255,0.45);
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,92,255,0.15);
+  }
+  .card-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+  }
+  .card-icon{
+    width:44px; height:44px;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:19px;
+    font-weight:700;
+    background:linear-gradient(135deg, var(--icon1,#7c5cff), var(--icon2,#3ee8d8));
+    color:#07080c;
+    box-shadow:0 8px 22px -6px rgba(124,92,255,0.5);
+    overflow:hidden;
+    position:relative;
+  }
+  .card-icon img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+    position:absolute;
+    inset:0;
+  }
+  .card-icon span{
+    position:relative;
+    z-index:1;
+  }
+  .card-arrow{
+    width:30px; height:30px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px;
+    color:var(--muted);
+    transition:transform .3s, color .3s, border-color .3s;
+  }
+  .card:hover .card-arrow{
+    transform:translate(3px,-3px);
+    color:var(--cyan);
+    border-color:rgba(62,232,216,0.4);
+  }
+  .card h3{
+    font-size:1.15rem;
+    font-weight:700;
+    margin-bottom:8px;
+    letter-spacing:-0.3px;
+  }
+  .card p{
+    font-size:0.88rem;
+    color:var(--muted);
+    line-height:1.55;
+  }
+  .card .path{
+    margin-top:16px;
+    font-size:0.72rem;
+    color:var(--cyan);
+    font-family:'Consolas','Monaco',monospace;
+    opacity:0.7;
+  }
+
+  footer{
+    text-align:center;
+    margin-top:100px;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+<div class="noise"></div>
+
+<div class="wrap">
+
+  <header>
+    <div class="avatar" id="avatar">
+      <span>A</span>
+      <img id="avatarImg" alt="Abhiraj" style="display:none;">
+    </div>
+    <div class="eyebrow">Software Developer · AI Systems</div>
+    <h1>Abhiraj</h1>
+    <p class="tagline">
+      Building the <b>EkaDev</b> ecosystem — a family of tools spanning intelligent
+      web platforms, agentic workflows, and developer tooling. Creator of <b>Cognix</b>,
+      focused on practical AI-driven software that ships.
+    </p>
+    <div class="links">
+      <a class="link-btn primary" href="https://github.com/Abhiraj1121" target="_blank" rel="noopener">
+        ★ GitHub
+      </a>
+      <a class="link-btn" href="https://abhiraj1121.github.io/about-me" target="_blank" rel="noopener">
+        About Me
+      </a>
+      <a class="link-btn" href="https://abhiraj1121.github.io/aboutekadev" target="_blank" rel="noopener">
+        EkaDev Docs
+      </a>
+    </div>
+  </header>
+
+  <div class="section-label">
+    <div class="eyebrow">Projects</div>
+    <h2>Repositories &amp; Platforms</h2>
+    <p>Nine active projects across the EkaDev / Cognix ecosystem</p>
+  </div>
+
+  <div class="grid" id="cardGrid">
+    <!-- cards injected by JS -->
+  </div>
+
+  <footer>© 2026 Abhiraj — EkaDev Ecosystem</footer>
+</div>
+
+<script>
+// ---------- Mesh gradient animated background ----------
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize(){
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const blobs = [
+  {x:0.2, y:0.25, r:0.5, c:'139,92,246', dx:0.00021, dy:0.00017, t:0},   // purple
+  {x:0.8, y:0.2, r:0.45, c:'76,111,255', dx:-0.00018, dy:0.00024, t:2},  // blue
+  {x:0.5, y:0.8, r:0.55, c:'240,180,41', dx:0.00016, dy:-0.0002, t:4},   // gold
+  {x:0.15, y:0.75, r:0.4, c:'88,40,150', dx:0.00022, dy:0.00013, t:6}    // deep violet
+];
+
+function draw(time){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#050508';
+  ctx.fillRect(0,0,W,H);
+
+  blobs.forEach(b=>{
+    const x = (b.x + Math.sin(time*b.dx + b.t)*0.12) * W;
+    const y = (b.y + Math.cos(time*b.dy + b.t)*0.12) * H;
+    const r = b.r * Math.max(W,H) * 0.6;
+    const grad = ctx.createRadialGradient(x,y,0,x,y,r);
+    grad.addColorStop(0, `rgba(${b.c},0.38)`);
+    grad.addColorStop(1, `rgba(${b.c},0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fill();
+  });
+
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+// ---------- Card data ----------
+const projects = [
+  {name:"About EkaDev", desc:"EkaDev ecosystem overview and documentation.", path:"/aboutekadev/", url:"https://abhiraj1121.github.io/aboutekadev", icon:"E", c1:"#8b5cf6", c2:"#4c6fff", img:"photo/aboutekadev.jpg"},
+  {name:"Eka", desc:"Eka core web platform and interfaces.", path:"/eka/", url:"https://abhiraj1121.github.io/eka", icon:"K", c1:"#4c6fff", c2:"#8b5cf6", img:"photo/eka.jpg"},
+  {name:"Cognix", desc:"Intelligent tooling & AI workflow repository.", path:"/cognix/", url:"https://abhiraj1121.github.io/cognix", icon:"C", c1:"#f0b429", c2:"#8b5cf6", img:"photo/cognix.jpg"},
+  {name:"Eka Mini", desc:"Lightweight companion build of the Eka platform.", path:"/ekamini/", url:"https://abhiraj1121.github.io/ekamini", icon:"M", c1:"#8b5cf6", c2:"#582896", img:"photo/ekamini.jpg"},
+  {name:"Agentic AI", desc:"Autonomous agent workflows and orchestration.", path:"/agenticai/", url:"https://abhiraj1121.github.io/agenticai", icon:"Ag", c1:"#4c6fff", c2:"#8b5cf6", img:"photo/agenticai.jpg"},
+  {name:"Cognix Studio", desc:"Visual studio & workspace for Cognix tooling.", path:"/cognix-studio/", url:"https://abhiraj1121.github.io/cognix-studio", icon:"S", c1:"#f0b429", c2:"#d99420", img:"photo/cognix-studio.jpg"},
+  {name:"AI", desc:"General AI experiments and utility interfaces.", path:"/ai/", url:"https://abhiraj1121.github.io/ai", icon:"AI", c1:"#8b5cf6", c2:"#4c6fff", img:"photo/ai.jpg"},
+  {name:"Sol Net", desc:"Networked systems and connectivity experiments.", path:"/sol-net/", url:"https://abhiraj1121.github.io/sol-net", icon:"N", c1:"#4c6fff", c2:"#582896", img:"photo/sol-net.jpg"},
+  {name:"About Me", desc:"Profile, background, and developer journey.", path:"/about-me/", url:"https://abhiraj1121.github.io/about-me", icon:"A", c1:"#f0b429", c2:"#8b5cf6", img:"photo/about-me.jpg"}
+];
+
+const grid = document.getElementById('cardGrid');
+projects.forEach(p=>{
+  const a = document.createElement('a');
+  a.href = p.url;
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.className = "card";
+  a.style.setProperty('--icon1', p.c1);
+  a.style.setProperty('--icon2', p.c2);
+  a.innerHTML = `
+    <div class="card-top">
+      <div class="card-icon">
+        <span>${p.icon}</span>
+        <img src="${p.img}" alt="${p.name}" style="display:none;">
+      </div>
+      <div class="card-arrow">↗</div>
+    </div>
+    <div>
+      <h3>${p.name}</h3>
+      <p>${p.desc}</p>
+      <div class="path">${p.path}</div>
+    </div>
+  `;
+  grid.appendChild(a);
+
+  // try loading the thumbnail; show it only if it actually exists
+  const imgEl = a.querySelector('.card-icon img');
+  const testImg = new Image();
+  testImg.onload = () => { imgEl.src = p.img; imgEl.style.display = 'block'; };
+  testImg.onerror = () => {}; // keep letter fallback
+  testImg.src = p.img;
+});
+
+// ---------- Avatar image (falls back to "A" if photo/avatar.jpg is missing) ----------
+(function(){
+  const avatarImg = document.getElementById('avatarImg');
+  const avatarSpan = document.querySelector('#avatar span');
+  const testImg = new Image();
+  testImg.onload = () => {
+    avatarImg.src = 'photo/avatar.jpg';
+    avatarImg.style.display = 'block';
+    avatarSpan.style.display = 'none';
+  };
+  testImg.onerror = () => {}; // keep "A" fallback
+  testImg.src = 'photo/avatar.jpg';
+})();
+
+// ---------- 3D tilt + glow on cards & buttons ----------
+function attachTilt(el, intensity=10){
+  el.addEventListener('mousemove', e=>{
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rx = (py - 0.5) * -intensity;
+    const ry = (px - 0.5) * intensity;
+    el.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+    el.style.setProperty('--mx', `${px*100}%`);
+    el.style.setProperty('--my', `${py*100}%`);
+  });
+  el.addEventListener('mouseleave', ()=>{
+    el.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0)';
+  });
+}
+document.querySelectorAll('.card').forEach(c=>attachTilt(c, 8));
+document.querySelectorAll('.link-btn').forEach(b=>attachTilt(b, 6));
+</script>
+
+</body>
+</html>
