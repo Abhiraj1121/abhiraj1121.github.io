@@ -1,4 +1,4 @@
-# Abhiraj — Portfolio Landing Page
+# Abhi Raj — Portfolio Landing Page
 
 A single-file, dark-themed landing page for the EkaDev / Cognix ecosystem, featuring an animated mesh-gradient background (gold / purple / black / blue) and 3D tilt hover effects.
 
