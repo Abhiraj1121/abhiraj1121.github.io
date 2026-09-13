@@ -23,7 +23,7 @@ export const projects: Project[] = [
     c1: "#f0b429",
     c2: "#8b5cf6",
     icon: "H",
-    position: [0, -0.6, -0.5],
+    position: [-2.2, -1.6, -0.8],
     featured: true,
   },
   {
@@ -36,7 +36,7 @@ export const projects: Project[] = [
     c1: "#8b5cf6",
     c2: "#4c6fff",
     icon: "E",
-    position: [-5.4, -1.2, -1.8],
+    position: [-6.4, -1.6, -0.8],
   },
   {
     id: "eka",
@@ -48,7 +48,7 @@ export const projects: Project[] = [
     c1: "#4c6fff",
     c2: "#8b5cf6",
     icon: "E",
-    position: [5.4, -1.2, -1.8],
+    position: [2.2, -1.6, -0.8],
   },
   {
     id: "cognix",
@@ -60,7 +60,7 @@ export const projects: Project[] = [
     c1: "#f0b429",
     c2: "#8b5cf6",
     icon: "C",
-    position: [-3.2, -2.0, 0.4],
+    position: [-2.2, -2.8, 0.2],
   },
   {
     id: "ekamini",
@@ -72,7 +72,7 @@ export const projects: Project[] = [
     c1: "#8b5cf6",
     c2: "#582896",
     icon: "M",
-    position: [3.2, -2.0, 0.4],
+    position: [2.2, -2.8, 0.2],
   },
   {
     id: "agenticai",
@@ -84,7 +84,7 @@ export const projects: Project[] = [
     c1: "#4c6fff",
     c2: "#8b5cf6",
     icon: "A",
-    position: [0, -2.6, 1.0],
+    position: [6.4, -2.8, 0.2],
   },
   {
     id: "cognix-studio",
@@ -96,7 +96,7 @@ export const projects: Project[] = [
     c1: "#f0b429",
     c2: "#d99420",
     icon: "S",
-    position: [-6.4, -2.2, 0.8],
+    position: [-6.4, -2.8, 0.2],
   },
   {
     id: "ai",
@@ -108,7 +108,7 @@ export const projects: Project[] = [
     c1: "#8b5cf6",
     c2: "#4c6fff",
     icon: "A",
-    position: [6.4, -2.2, 0.8],
+    position: [6.4, -1.6, -0.8],
   },
   {
     id: "sol-net",
@@ -120,7 +120,7 @@ export const projects: Project[] = [
     c1: "#4c6fff",
     c2: "#582896",
     icon: "N",
-    position: [-1.8, -3.0, -1.2],
+    position: [-6.4, -4.0, 1.2],
   },
   {
     id: "about-me",
@@ -132,7 +132,7 @@ export const projects: Project[] = [
     c1: "#f0b429",
     c2: "#8b5cf6",
     icon: "P",
-    position: [1.8, -3.0, -1.2],
+    position: [-2.2, -4.0, 1.2],
   },
   {
     id: "music",
@@ -144,7 +144,7 @@ export const projects: Project[] = [
     c1: "#4c6fff",
     c2: "#f0b429",
     icon: "♪",
-    position: [-4.2, -3.2, 1.6],
+    position: [2.2, -4.0, 1.2],
   },
   {
     id: "cogno",
@@ -156,6 +156,6 @@ export const projects: Project[] = [
     c1: "#8b5cf6",
     c2: "#f0b429",
     icon: "Q",
-    position: [4.2, -3.2, 1.6],
+    position: [6.4, -4.0, 1.2],
   },
 ];
