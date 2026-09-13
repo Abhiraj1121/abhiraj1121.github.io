@@ -6,7 +6,7 @@ import ProjectNode from "./ProjectNode";
 
 function CameraRig({ isMobile }: { isMobile: boolean }) {
   const { camera, pointer } = useThree();
-  const target = useRef(new THREE.Vector3(0, -2.4, 0));
+  const target = useRef(new THREE.Vector3(0, -1.0, 0));
   const baseY = useRef<number | null>(null);
 
   useFrame(() => {
