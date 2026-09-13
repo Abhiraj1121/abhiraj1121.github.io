@@ -4,6 +4,7 @@ import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import type { Project } from "../data/projects";
 
+
 interface Props {
   project: Project;
   index: number;
