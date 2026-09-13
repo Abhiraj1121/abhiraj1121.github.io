@@ -22,7 +22,9 @@ export default function ProjectNode({ project, index, isMobile = false }: Props)
   });
 
   const baseFactor = project.featured ? 7.5 : 9.5;
-  const distanceFactor = isMobile ? baseFactor * 1.5 : baseFactor;
+  // NOTE: drei's Html scales UP as distanceFactor increases (scale = objectScale * distanceFactor).
+  // A fraction below 1 shrinks mobile cards; a value above 1 would enlarge them.
+  const distanceFactor = isMobile ? baseFactor * 0.72 : baseFactor;
 
   return (
     <group ref={group} position={project.position}>
@@ -31,7 +33,7 @@ export default function ProjectNode({ project, index, isMobile = false }: Props)
           href={project.url}
           target="_blank"
           rel="noopener noreferrer"
-          className={`group block w-36 sm:w-52 select-none touch-manipulation rounded-xl sm:rounded-2xl border px-3 py-2.5 sm:px-4 sm:py-3 backdrop-blur-md transition-all duration-300 active:scale-95
+          className={`group block w-32 sm:w-52 select-none touch-manipulation rounded-xl sm:rounded-2xl border px-2.5 py-2 sm:px-4 sm:py-3 backdrop-blur-md transition-all duration-300 active:scale-95
           ${project.featured
               ? "border-violet/60 bg-gradient-to-br from-violet/25 to-cyan/10 shadow-[0_0_40px_-10px_rgba(139,92,246,0.6)]"
               : "border-white/10 bg-white/5 hover:border-violet/50 hover:bg-white/10"}
