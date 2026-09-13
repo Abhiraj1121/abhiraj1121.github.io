@@ -22,7 +22,7 @@ export default function ProjectNode({ project, index, isMobile = false }: Props)
   });
 
   const baseFactor = project.featured ? 7.5 : 9.5;
-  const distanceFactor = isMobile ? baseFactor * 1.35 : baseFactor;
+  const distanceFactor = isMobile ? baseFactor * 1.5 : baseFactor;
 
   return (
     <group ref={group} position={project.position}>

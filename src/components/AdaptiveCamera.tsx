@@ -12,7 +12,7 @@ export default function AdaptiveCamera() {
     const isNarrow = size.width < 640;
 
     persp.fov = isPortrait ? 75 : isNarrow ? 62 : 55;
-    persp.position.set(0, isPortrait ? 0.1 : 0.5, isPortrait ? 13 : isNarrow ? 10 : 8);
+    persp.position.set(0, isPortrait ? 0.1 : 0.5, isPortrait ? 13 : isNarrow ? 10 : 9);
     persp.updateProjectionMatrix();
   }, [camera, size]);
 
