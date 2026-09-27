@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>abhiraj1121 — Cognix Studio</title>
+<meta name="description" content="Launchpad for abhiraj1121 and Cognix Studio projects — EKA, AI Hub, Cogno, Sol-Net and more.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="scanline" aria-hidden="true"></div>
+
+<div class="grain" aria-hidden="true"></div>
+
+<main class="shell">
+
+  <header class="identity" id="top">
+    <div class="identity__portrait">
+      <img class="identity__avatar" src="photo/avatar.jpg" alt="abhiraj1121 profile photo" width="88" height="88"
+           onerror="this.onerror=null;this.replaceWith(window.__fallbackAvatar());">
+      <img class="identity__badge" src="photo/cognix-icon-transparent.png" alt="Cognix Studio badge" width="34" height="34"
+           onerror="this.onerror=null;this.replaceWith(window.__fallbackBadge());">
+    </div>
+
+    <div class="identity__text">
+      <p class="identity__kicker">Launchpad</p>
+      <h1 class="identity__name">
+        <span class="identity__handle">abhiraj1121</span>
+        <span class="identity__sep" aria-hidden="true">/</span>
+        <span class="identity__studio">Cognix Studio</span>
+      </h1>
+      <div class="identity__status" role="status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span class="status-text">Systems Operational</span>
+        <span class="status-clock" id="clock" aria-hidden="true"></span>
+      </div>
+    </div>
+  </header>
+
+  <section class="console" aria-label="Project search and directory">
+    <div class="console__bar">
+      <label class="console__label" for="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 20L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </label>
+      <input
+        type="text"
+        id="search"
+        class="console__input"
+        placeholder="Search projects — try 'ai', 'eka', 'game'…"
+        autocomplete="off"
+        spellcheck="false"
+        aria-controls="grid"
+      >
+      <span class="console__count" id="resultCount" aria-live="polite">9 modules</span>
+    </div>
+
+    <div class="grid" id="grid">
+
+      <a class="card" data-name="eka core ecosystem" href="https://abhiraj1121.github.io/eka/" target="_blank" rel="noopener">
+        <span class="card__media">
+          <img src="photo/eka_logo.svg" alt="" width="56" height="56"
+               onerror="this.onerror=null;this.src='photo/eka.jpg';this.dataset.fallback2='1';"
+               onload="if(this.dataset.fallback2){this.classList.add('card__media-img--photo')}">
+        </span>
+        <span class="card__body">
+          <span class="card__title">EKA</span>
+          <span class="card__subtitle">Core Ecosystem</span>
+        </span>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <a class="card" data-name="eka mini compact edition" href="https://abhiraj1121.github.io/ekamini/" target="_blank" rel="noopener">
+        <span class="card__media">
+          <img class="card__media-img--photo" src="photo/eka.jpg" alt="" width="56" height="56"
+               onerror="this.onerror=null;this.replaceWith(window.__iconFallback('mini'));">
+        </span>
+        <span class="card__body">
+          <span class="card__title">EKA Mini</span>
+          <span class="card__subtitle">Compact Edition</span>
+        </span>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <a class="card" data-name="music sound audio lab" href="https://abhiraj1121.github.io/music/" target="_blank" rel="noopener">
+        <span class="card__media card__media--icon icon-music" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
+        </span>
+        <span class="card__body">
+          <span class="card__title">Music</span>
+          <span class="card__subtitle">Sound &amp; Audio Lab</span>
+        </span>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <a class="card" data-name="fps gaming engine benchmark" href="https://abhiraj1121.github.io/fps/" target="_blank" rel="noopener">
+        <span class="card__media card__media--icon icon-fps" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/></svg>
+        </span>
+        <span class="card__body">
+          <span class="card__title">FPS</span>
+          <span class="card__subtitle">Gaming &amp; Engine Benchmark</span>
+        </span>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <a class="card" data-name="sol-net network platform" href="https://abhiraj1121.github.io/sol-net/" target="_blank" rel="noopener">
+        <span class="card__media card__media--icon icon-solnet" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v3.2M12 18.8V22M22 12h-3.2M5.2 12H2M18.4 5.6l-2.2 2.2M7.8 16.2l-2.2 2.2M18.4 18.4l-2.2-2.2M7.8 7.8L5.6 5.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="card__body">
+          <span class="card__title">Sol-Net</span>
+          <span class="card__subtitle">Network Platform</span>
+        </span>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <a class="card" data-name="cogno cognitive computing" href="https://abhiraj1121.github.io/cogno/" target="_blank" rel="noopener">
+        <span class="card__media">
+          <img class="card__media-img--photo" src="photo/Cognix 1.png" alt="" width="56" height="56"
+               onerror="this.onerror=null;this.src='photo/Cognix2.png';">
+        </span>
+        <span class="card__body">
+          <span class="card__title">Cogno</span>
+          <span class="card__subtitle">Cognitive Computing</span>
+        </span>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <a class="card" data-name="ai artificial intelligence hub" href="https://abhiraj1121.github.io/ai/" target="_blank" rel="noopener">
+        <span class="card__media">
+          <img class="card__media-img--photo" src="photo/ai.jpg" alt="" width="56" height="56"
+               onerror="this.onerror=null;this.replaceWith(window.__iconFallback('ai'));">
+        </span>
+        <span class="card__body">
+          <span class="card__title">AI</span>
+          <span class="card__subtitle">Artificial Intelligence Hub</span>
+        </span>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <a class="card" data-name="cognix studio official" href="https://cognixstudio.github.io/" target="_blank" rel="noopener">
+        <span class="card__media">
+          <img class="card__media-img--photo" src="photo/cognix.jpg" alt="" width="56" height="56"
+               onerror="this.onerror=null;this.src='photo/cognix-icon-transparent.png';this.classList.remove('card__media-img--photo');">
+        </span>
+        <span class="card__body">
+          <span class="card__title">Cognix Studio</span>
+          <span class="card__subtitle">Official Studio</span>
+        </span>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+      </a>
+
+      <a class="card" data-name="about me profile dossier" href="https://abhiraj1121.github.io/about-me/" target="_blank" rel="noopener">
+        <span class="card__media">
+          <img class="card__media-img--photo" src="photo/aboutekadev.jpg" alt="" width="56" height="56"
+               onerror="this.onerror=null;this.replaceWith(window.__iconFallback('about'));">
+        </span>
+        <span class="card__body">
+          <span class="card__title">About Me</span>
+          <span class="card__subtitle">Profile &amp; Dossier</span>
+        </span>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+      </a>
+
+    </div>
+
+    <p class="empty-state" id="emptyState" hidden>No modules match "<span id="emptyQuery"></span>". Clear the search to see everything.</p>
+  </section>
+
+  <footer class="site-footer">
+    <span>© <span id="year"></span> abhiraj1121 / Cognix Studio</span>
+    <span class="site-footer__dot" aria-hidden="true">•</span>
+    <span>Built for GitHub Pages</span>
+  </footer>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
