@@ -363,6 +363,127 @@
             50% { opacity: 0.5; transform: scale(0.85); }
         }
 
+        /* Bot mascot */
+        .bot-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: -0.5rem;
+        }
+
+        .bot {
+            width: 150px;
+            height: 130px;
+            filter: drop-shadow(0 12px 24px rgba(59,130,246,0.3));
+        }
+
+        .bot-head {
+            animation: sadNod 4.5s ease-in-out infinite;
+            transform-origin: 80px 60px;
+        }
+
+        @keyframes sadNod {
+            0%, 100% { transform: rotate(0deg) translateY(0); }
+            50% { transform: rotate(2deg) translateY(2px); }
+        }
+
+        .bot-eye {
+            animation: botBlink 3.6s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        @keyframes botBlink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        .plug-spark {
+            animation: sparkFlicker 1.5s ease-in-out infinite;
+        }
+
+        @keyframes sparkFlicker {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 0.15; }
+        }
+
+        .bot-bubble {
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            font-weight: 600;
+            fill: var(--text);
+        }
+
+        .tear {
+            animation: tearDrop 3.2s ease-in infinite;
+        }
+
+        @keyframes tearDrop {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            60% { transform: translateY(10px); opacity: 0.8; }
+            100% { transform: translateY(14px); opacity: 0; }
+        }
+
+        /* Interactive reconnect prompt + plugs */
+        .reconnect-hint {
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--accent-bright);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            margin: -0.2rem 0 0.6rem;
+            opacity: 0.85;
+            animation: hintPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes hintPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        #plugMale, #plugFemale {
+            cursor: pointer;
+            transition: filter 0.2s ease;
+        }
+
+        #plugMale:hover, #plugFemale:hover {
+            filter: drop-shadow(0 0 6px var(--accent-bright));
+        }
+
+        .bot.is-fixing #plugMale {
+            animation: pullTogetherL 0.7s ease-in-out forwards;
+        }
+        .bot.is-fixing #plugFemale {
+            animation: pullTogetherR 0.7s ease-in-out forwards;
+        }
+        .bot.is-fixing .plug-spark {
+            animation: sparkBurst 0.7s ease-out forwards;
+        }
+        .bot.is-fixed .bot-head {
+            animation: happyBounce 0.6s ease-out forwards;
+        }
+        .bot.is-fixed .sad-face { opacity: 0; }
+        .bot.is-fixed .happy-face { opacity: 1; }
+
+        @keyframes pullTogetherL {
+            to { transform: translate(24px, 0) rotate(0deg); }
+        }
+        @keyframes pullTogetherR {
+            to { transform: translate(-24px, 0) rotate(0deg); }
+        }
+        @keyframes sparkBurst {
+            0% { opacity: 0.9; }
+            40% { opacity: 1; filter: drop-shadow(0 0 6px #4ade80); stroke: #4ade80; }
+            100% { opacity: 0; }
+        }
+        @keyframes happyBounce {
+            0% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        .happy-face { opacity: 0; transition: opacity 0.3s ease; }
+        .sad-face { transition: opacity 0.3s ease; }
+
         /* Responsive */
         @media (max-width: 600px) {
             .card {
@@ -391,6 +512,8 @@
                 font-size: 0.75rem;
                 min-height: 110px;
             }
+
+            .bot { width: 100px; height: 92px; }
         }
     </style>
 </head>
@@ -405,6 +528,80 @@
 
     <div class="scene" id="scene">
         <div class="card" id="card">
+            <div class="bot-wrap">
+                <svg class="bot" id="bot" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- speech bubble -->
+                    <rect x="86" y="4" width="70" height="24" rx="8" fill="rgba(15,23,42,0.85)" stroke="rgba(148,163,184,0.25)"/>
+                    <polygon points="96,28 90,36 100,34" fill="rgba(15,23,42,0.85)"/>
+                    <text class="bot-bubble" id="botText" x="121" y="19" text-anchor="middle">page not found...</text>
+
+                    <g class="bot-head">
+                        <!-- antenna, drooping -->
+                        <line x1="70" y1="42" x2="64" y2="50" stroke="#475569" stroke-width="2.5"/>
+                        <circle cx="63" cy="51" r="3.5" fill="#334155"/>
+
+                        <!-- head, tilted down -->
+                        <rect x="46" y="48" width="52" height="38" rx="13" fill="url(#botGrad)" stroke="rgba(148,163,184,0.3)"/>
+
+                        <g class="sad-face">
+                            <path d="M58 66q4-4 10 0" stroke="#94a3b8" stroke-width="2.3" stroke-linecap="round" fill="none" class="bot-eye"/>
+                            <path d="M80 66q4-4 10 0" stroke="#94a3b8" stroke-width="2.3" stroke-linecap="round" fill="none" class="bot-eye"/>
+                            <circle class="tear" cx="60" cy="72" r="2" fill="#60a5fa"/>
+                            <path d="M62 79q10-6 20 0" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+                        </g>
+
+                        <g class="happy-face">
+                            <path d="M58 68q4 4 10 0" stroke="#4ade80" stroke-width="2.3" stroke-linecap="round" fill="none"/>
+                            <path d="M80 68q4 4 10 0" stroke="#4ade80" stroke-width="2.3" stroke-linecap="round" fill="none"/>
+                            <path d="M62 77q10 8 20 0" stroke="#4ade80" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+                        </g>
+                    </g>
+
+                    <!-- body, slumped, sitting -->
+                    <rect x="40" y="86" width="60" height="32" rx="12" fill="url(#botGrad2)" stroke="rgba(148,163,184,0.3)"/>
+
+                    <!-- bent legs, sitting on floor -->
+                    <path d="M46 116q2 14 -4 20h16q4-10 2-20" fill="#1e293b" stroke="#334155"/>
+                    <path d="M94 116q-2 14 4 20H82q-4-10-2-20" fill="#1e293b" stroke="#334155"/>
+                    <rect x="34" y="132" width="20" height="8" rx="3" fill="#334155"/>
+                    <rect x="86" y="132" width="20" height="8" rx="3" fill="#334155"/>
+
+                    <!-- arms drooping down holding plug halves together, unconnected -->
+                    <path d="M40 96q-10 8 -8 24" stroke="#334155" stroke-width="7" stroke-linecap="round" fill="none"/>
+                    <path d="M100 96q10 8 6 24" stroke="#334155" stroke-width="7" stroke-linecap="round" fill="none"/>
+
+                    <!-- male plug in left hand -->
+                    <g id="plugMale" transform="translate(20,118) rotate(-6)">
+                        <rect x="0" y="0" width="20" height="10" rx="3" fill="#3b82f6"/>
+                        <line x1="4" y1="0" x2="4" y2="-7" stroke="#93c5fd" stroke-width="2.3" stroke-linecap="round"/>
+                        <line x1="11" y1="0" x2="11" y2="-7" stroke="#93c5fd" stroke-width="2.3" stroke-linecap="round"/>
+                    </g>
+
+                    <!-- female socket in right hand -->
+                    <g id="plugFemale" transform="translate(96,118) rotate(6)">
+                        <rect x="0" y="0" width="20" height="13" rx="4" fill="#1e293b" stroke="#475569"/>
+                        <circle cx="6" cy="6.5" r="1.5" fill="#0f172a"/>
+                        <circle cx="14" cy="6.5" r="1.5" fill="#0f172a"/>
+                    </g>
+
+                    <!-- disconnect gap sparks between the two halves -->
+                    <path d="M44 122h5M53 122h5" stroke="#ef4444" class="plug-spark" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M78 122h5M87 122h5" stroke="#ef4444" class="plug-spark" stroke-width="2" stroke-linecap="round"/>
+
+                    <defs>
+                        <linearGradient id="botGrad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#475569"/>
+                            <stop offset="1" stop-color="#1e293b"/>
+                        </linearGradient>
+                        <linearGradient id="botGrad2" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#334155"/>
+                            <stop offset="1" stop-color="#0f172a"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <p class="reconnect-hint" id="reconnectHint">⚡ tap either plug to reconnect me</p>
+
             <div class="status">
                 <span class="status-dot"></span>
                 System Offline
@@ -635,6 +832,36 @@
             requestAnimationFrame(tiltLoop);
         }
         tiltLoop();
+
+        // ─────────────────────────────────────────────
+        // 4. Interactive plug reconnect
+        // ─────────────────────────────────────────────
+        const bot = document.getElementById('bot');
+        const plugMale = document.getElementById('plugMale');
+        const plugFemale = document.getElementById('plugFemale');
+        const botText = document.getElementById('botText');
+        const hint = document.getElementById('reconnectHint');
+        let fixed = false;
+
+        function reconnect() {
+            if (fixed) return;
+            fixed = true;
+            bot.classList.add('is-fixing');
+            botText.textContent = 'reconnecting...';
+            hint.textContent = '⚡ restoring link';
+
+            setTimeout(() => {
+                bot.classList.add('is-fixed');
+                botText.textContent = 'all better now!';
+                hint.textContent = '✓ connection restored';
+                hint.style.color = 'var(--green)';
+            }, 650);
+        }
+
+        plugMale.addEventListener('click', reconnect);
+        plugFemale.addEventListener('click', reconnect);
+        plugMale.addEventListener('touchstart', reconnect, { passive: true });
+        plugFemale.addEventListener('touchstart', reconnect, { passive: true });
     </script>
 </body>
 </html>
