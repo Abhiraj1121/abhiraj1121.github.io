@@ -709,6 +709,8 @@ body:not(.is-loading) .card {
 .icon-music { background: linear-gradient(135deg, rgba(56,189,248,0.16), rgba(129,140,248,0.10)); }
 .icon-fps { background: linear-gradient(135deg, rgba(129,140,248,0.16), rgba(56,189,248,0.08)); color: var(--indigo); }
 .icon-solnet { background: linear-gradient(135deg, rgba(74,222,128,0.14), rgba(56,189,248,0.10)); color: var(--green); }
+.icon-nova { background: linear-gradient(135deg, rgba(129,140,248,0.16), rgba(74,222,128,0.10)); color: var(--indigo); }
+.icon-store { background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(129,140,248,0.12)); color: var(--cyan); }
 
 .card:hover .card__media--icon svg,
 .card:focus-visible .card__media--icon svg {
