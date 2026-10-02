@@ -1,0 +1,15 @@
+##For dev TXT
+## in case of adding new files use this code formate and apply into store.js
+{
+  id: "eka",
+  name: "EKA",
+  tagline: "Core Ecosystem App",
+  description: "...",
+  version: "v1.0.0",
+  icon: "photo/eka_logo.svg",
+  iconFallbackText: "EK",
+  platforms: [
+    { os: "windows", label: "Windows", fileLabel: "Setup .exe", url: "YOUR_URL" },
+    { os: "android", label: "Android", fileLabel: ".apk", url: "YOUR_URL" },
+  ],
+}
