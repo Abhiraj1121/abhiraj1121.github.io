@@ -34,6 +34,12 @@ const APPS = [
         fileLabel: ".AppImage",
         url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-v2.0.0-x86_64.AppImage",
       },
+       {
+          os: "android",
+          label: "android",
+          fileLebel: ".apk",
+          url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-2.0.0.apk",
+       }
     ],
   },
 
