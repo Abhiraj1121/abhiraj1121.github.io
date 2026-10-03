@@ -36,8 +36,8 @@ const APPS = [
       },
        {
           os: "android",
-          label: "android",
-          fileLebel: ".apk",
+          label: "Android",
+          fileLabel: ".apk",
           url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-2.0.0.apk",
        }
     ],
