@@ -43,7 +43,6 @@ const APPS = [
     ],
   },
 
-  /*
   // Example — EKA, once builds exist. Copy, uncomment, and fill in real URLs:
   {
     id: "eka",
@@ -54,13 +53,11 @@ const APPS = [
     icon: "photo/eka_logo.svg",
     iconFallbackText: "EK",
     platforms: [
-      { os: "windows", label: "Windows", fileLabel: "Setup .exe", url: "" },
-      { os: "linux",   label: "Linux",   fileLabel: ".deb package", url: "" },
-      { os: "linux",   label: "Linux",   fileLabel: ".AppImage", url: "" },
-      { os: "android", label: "Android", fileLabel: ".apk", url: "" },
+      { os: "windows", label: "Windows", fileLabel: "Setup .exe", url: "https://github.com/Abhiraj1121/eka/releases/download/EKA/EKA-AI-1.0.0-win-x64.exe" },
+      { os: "linux",   label: "Linux",   fileLabel: ".deb package", url: "https://github.com/Abhiraj1121/eka/releases/download/EKA/EKA-AI-1.0.0-linux-amd64.deb" },
     ],
   },
-  */
+  
 ];
 
 /* ---------- platform icon glyphs (inline SVG, no external files) ---------- */
