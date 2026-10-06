@@ -57,6 +57,19 @@ const APPS = [
       { os: "linux",   label: "Linux",   fileLabel: ".deb package", url: "https://github.com/Abhiraj1121/eka/releases/download/EKA/EKA-AI-1.0.0-linux-amd64.deb" },
     ],
   },
+  {
+    id: "music",
+    name: "Audio Visualizer",
+    tagline: "Core Ecosystem App",
+    description: "A Audio tracking app.",
+    version: "v3.0.0",
+    icon: "photo/cognix.jpg",
+    iconFallbackText: "EK",
+    platforms: [
+      { os: "windows", label: "Windows", fileLabel: "Setup .exe", url: "https://github.com/Abhiraj1121/music/releases/download/Cognoproject/Cognix.3D.Audio.Visualizer-Setup-3.0.0.exe" },
+      { os: "linux",   label: "Linux",   fileLabel: ".deb package", url: "https://github.com/Abhiraj1121/music/releases/download/Cognoproject/cognix-3d-audio-visualizer_3.0.0_amd64.deb" },
+    ],
+  },
   
 ];
 
