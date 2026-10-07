@@ -5,41 +5,40 @@
      Fallback builders — used by inline onerror handlers in HTML
      --------------------------------------------------------- */
 
-  window.__fallbackAvatar = function () {
-    const el = document.createElement("div");
-    el.className = "identity__avatar fallback-badge";
-    el.style.width = "88px";
-    el.style.height = "88px";
-    el.style.fontSize = "28px";
-    el.textContent = "A";
-    return el;
-  };
-
-  window.__fallbackBadge = function () {
-    const el = document.createElement("div");
-    el.className = "identity__badge fallback-badge";
-    el.style.width = "34px";
-    el.style.height = "34px";
-    el.style.fontSize = "13px";
-    el.textContent = "C";
-    return el;
-  };
-
-  window.__iconFallback = function (label) {
-    const initials = {
-      mini: "EM",
-      ai: "AI",
-      about: "AM",
-    };
-    const el = document.createElement("span");
-    el.className = "fallback-icon";
-    el.textContent = initials[label] || "?";
-    return el;
-  };
-
   /* ---------------------------------------------------------
      Init on DOM ready
      --------------------------------------------------------- */
+
+  /* Last-resort: if a card image is still broken after its own fallback
+     chain, swap in an initials tile (asset paths are never altered). */
+  document.addEventListener("error", (e) => {
+    const img = e.target;
+    if (!(img instanceof HTMLImageElement) || !img.closest(".card__media")) return;
+    if (img.dataset.failed) return;
+    const card = img.closest(".card");
+    const t = card && card.querySelector(".card__title");
+    const key = (img.getAttribute("src") || "");
+    // allow the inline chain one more hop (e.g. svg -> jpg), then give up
+    if (img.dataset.hop !== "1" && /\.svg$|Cognix 1\.png$/i.test(key)) { img.dataset.hop = "1"; return; }
+    img.dataset.failed = "1";
+    const el = document.createElement("span");
+    el.className = "fallback-icon";
+    el.textContent = t ? t.textContent.trim().slice(0, 2).toUpperCase() : "?";
+    img.replaceWith(el);
+  }, true);
+
+  // Sweep for images that already failed before this script loaded.
+  window.addEventListener("load", () => {
+    document.querySelectorAll(".card__media img").forEach((img) => {
+      if (img.complete && img.naturalWidth === 0 && !img.dataset.failed) {
+        const t = img.closest(".card") && img.closest(".card").querySelector(".card__title");
+        const el = document.createElement("span");
+        el.className = "fallback-icon";
+        el.textContent = t ? t.textContent.trim().slice(0, 2).toUpperCase() : "?";
+        img.replaceWith(el);
+      }
+    });
+  });
 
   document.addEventListener("DOMContentLoaded", () => {
     stampFooterYear();
@@ -49,7 +48,9 @@
     setupRipple();
     setupKeyboardActivation();
     setupLoader();
-    setupMinibar();
+    setupTheme();
+    setupDock();
+    setupSpotlight();
   });
 
   /* ---------------------------------------------------------
@@ -70,13 +71,15 @@
 
   function setupLoader() {
     const bar = document.getElementById("loaderBar");
-    const minDisplayMs = 700; // avoid an unpleasant instant flash
+    const pctEl = document.getElementById("loaderPct");
+    const minDisplayMs = 1500; // avoid an unpleasant instant flash
     const startedAt = Date.now();
 
     let progress = 0;
     const setProgress = (value) => {
       progress = Math.max(progress, Math.min(value, 100));
       if (bar) bar.style.width = `${progress}%`;
+      if (pctEl) pctEl.textContent = Math.round(progress);
     };
 
     setProgress(12);
@@ -134,34 +137,51 @@
   }
 
   /* ---------------------------------------------------------
-     Sticky mini nav bar — appears once the header scrolls
-     out of view, hides again near the top.
+     Theme toggle (persisted) with circular reveal transition
      --------------------------------------------------------- */
 
-  function setupMinibar() {
-    const minibar = document.getElementById("minibar");
-    const header = document.getElementById("top");
-    if (!minibar || !header) return;
+  function setupTheme() {
+    const btn = document.getElementById("themeToggle");
+    const root = document.documentElement;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    const paint = () => meta && meta.setAttribute("content", root.dataset.theme === "light" ? "#f3f1fb" : "#0b0a12");
+    paint();
+    if (!btn) return;
 
-    const threshold = () => header.offsetTop + header.offsetHeight;
-
-    let ticking = false;
-    const update = () => {
-      const show = window.scrollY > threshold();
-      minibar.classList.toggle("is-visible", show);
-      minibar.setAttribute("aria-hidden", show ? "false" : "true");
-      ticking = false;
-    };
-
-    window.addEventListener("scroll", () => {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
-      }
+    btn.addEventListener("click", () => {
+      const next = root.dataset.theme === "light" ? "dark" : "light";
+      const apply = () => {
+        root.dataset.theme = next;
+        try { localStorage.setItem("theme", next); } catch (e) {}
+        paint();
+      };
+      const r = btn.getBoundingClientRect();
+      root.style.setProperty("--tx", `${r.left + r.width / 2}px`);
+      root.style.setProperty("--ty", `${r.top + r.height / 2}px`);
+      const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (document.startViewTransition && !calm) document.startViewTransition(apply);
+      else apply();
     });
+  }
 
-    window.addEventListener("resize", update);
-    update();
+  /* Dock: stronger shadow once scrolled */
+  function setupDock() {
+    const dock = document.getElementById("dock");
+    if (!dock) return;
+    const onScroll = () => dock.classList.toggle("is-scrolled", window.scrollY > 24);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* Cursor-follow spotlight on cards */
+  function setupSpotlight() {
+    document.addEventListener("pointermove", (e) => {
+      const el = e.target.closest && e.target.closest(".card, .app-card");
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      el.style.setProperty("--my", `${e.clientY - r.top}px`);
+    }, { passive: true });
   }
 
   /* ---------------------------------------------------------
@@ -189,7 +209,7 @@
      --------------------------------------------------------- */
 
   function assignCardStagger() {
-    const cards = document.querySelectorAll(".card");
+    const cards = document.querySelectorAll(".card, .app-card");
     cards.forEach((card, i) => {
       card.style.setProperty("--stagger", i);
     });
@@ -259,7 +279,7 @@
      --------------------------------------------------------- */
 
   function setupRipple() {
-    const targets = document.querySelectorAll(".card, .github-btn, .minibar__github");
+    const targets = document.querySelectorAll(".card, .btn, .dock__store");
 
     targets.forEach((el) => {
       // Ripple containers need relative positioning + clipping.

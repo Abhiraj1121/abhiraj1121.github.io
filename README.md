@@ -1,6 +1,6 @@
 # abhiraj1121 / Cognix Studio — Launchpad
 
-A dark, glassmorphic launchpad site that links out to every project under **abhiraj1121** and **Cognix Studio**. Built as static HTML/CSS/JS for GitHub Pages — no build step, no dependencies to install.
+A material-style, floating-dock launchpad (light + dark themes) site that links out to every project under **abhiraj1121** and **Cognix Studio**. Built as static HTML/CSS/JS for GitHub Pages — no build step, no dependencies to install.
 
 **Live site:** https://abhiraj1121.github.io/
 
@@ -10,7 +10,8 @@ A dark, glassmorphic launchpad site that links out to every project under **abhi
 
 ```
 ├── index.html      # markup + content (cards, header, search bar)
-├── style.css       # theme, layout, animations
+├── store.html / store.js / store.css  # Cognix Store (app downloads)
+├── style.css       # design system: light/dark tokens, dock, loader, cards
 ├── script.js       # search filter, ripple effect, fallbacks, clock/year
 └── photo/          # all image and video assets referenced by the site
     ├── avatar.jpg

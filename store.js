@@ -130,6 +130,26 @@ function appCardHTML(app) {
     </article>`;
 }
 
+/* ---------- platform filter chips ---------- */
+
+let activeOS = "all";
+
+function setupFilters() {
+  const wrap = document.getElementById("filters");
+  if (!wrap) return;
+  const oses = ["all", ...new Set(APPS.flatMap((a) => a.platforms.map((p) => p.os)))];
+  wrap.innerHTML = oses
+    .map((o) => `<button type="button" class="filter${o === "all" ? " is-active" : ""}" data-os="${o}">${o === "all" ? "All" : (OS_ICONS[o] || "") + o[0].toUpperCase() + o.slice(1)}</button>`)
+    .join("");
+  wrap.addEventListener("click", (e) => {
+    const b = e.target.closest(".filter");
+    if (!b) return;
+    activeOS = b.dataset.os;
+    wrap.querySelectorAll(".filter").forEach((f) => f.classList.toggle("is-active", f === b));
+    document.getElementById("storeSearch").dispatchEvent(new Event("input"));
+  });
+}
+
 /* ---------- search filter (mirrors launchpad behavior) ---------- */
 
 function setupStoreSearch() {
@@ -145,7 +165,8 @@ function setupStoreSearch() {
     let visible = 0;
 
     cards.forEach((card) => {
-      const match = query === "" || (card.dataset.name || "").includes(query);
+      const hay = card.dataset.name || "";
+      const match = (query === "" || hay.includes(query)) && (activeOS === "all" || hay.includes(activeOS));
       card.style.display = match ? "" : "none";
       if (match) visible++;
     });
@@ -186,6 +207,8 @@ function setupDownloadFeedback() {
 
 document.addEventListener("DOMContentLoaded", () => {
   renderApps();
+  setupFilters();
   setupStoreSearch();
+  document.querySelectorAll(".app-card").forEach((c, i) => c.style.setProperty("--stagger", i));
   setupDownloadFeedback();
 });
