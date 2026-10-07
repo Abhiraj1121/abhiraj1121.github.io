@@ -12,7 +12,7 @@ const APPS = [
     name: "NovaBoard",
     tagline: "Productivity Dashboard",
     description: "A fast, local-first dashboard for tracking tasks, notes and widgets in one place.",
-    version: "v2.0.0",
+    version: "v2.1.2",
     icon: "photo/novaboard-icon.webp",
     iconFallbackText: "NB",
     platforms: [
