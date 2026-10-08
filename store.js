@@ -12,7 +12,7 @@ const APPS = [
     name: "NovaBoard",
     tagline: "Productivity Dashboard",
     description: "A fast, local-first dashboard for tracking tasks, notes and widgets in one place.",
-    version: "v2.1.2",
+    version: "v3.0.0",
     icon: "photo/novaboard-icon.webp",
     iconFallbackText: "NB",
     platforms: [
@@ -20,25 +20,25 @@ const APPS = [
         os: "windows",
         label: "Windows",
         fileLabel: "Setup .exe",
-        url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-Setup-v2.1.2.exe",
+        url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-Setup-v3.0.0.exe",
       },
       {
         os: "linux",
         label: "Linux",
         fileLabel: ".deb package",
-        url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-v2.1.2-amd64.deb",
+        url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-v3.0.0-amd64.deb",
       },
       {
         os: "linux",
         label: "Linux",
         fileLabel: ".AppImage",
-        url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-v2.1.2-x86_64.AppImage",
+        url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-3.0.0-x86_64.AppImage",
       },
        {
           os: "android",
           label: "Android",
           fileLabel: ".apk",
-          url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-v2.1.2-Beta.apk",
+          url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-v3.0.0-Beta.apk",
        }
     ],
   },
