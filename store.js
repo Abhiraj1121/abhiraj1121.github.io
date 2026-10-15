@@ -38,7 +38,7 @@ const APPS = [
           os: "android",
           label: "Android",
           fileLabel: ".apk",
-          url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-v3.0.2.apk",
+          url: "https://github.com/Abhiraj1121/novaboard/releases/download/Novaboard/NovaBoard-OS-v3.0.1.apk",
        }
     ],
   },
