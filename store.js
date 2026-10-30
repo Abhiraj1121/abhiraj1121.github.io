@@ -70,6 +70,18 @@ const APPS = [
       { os: "linux",   label: "Linux",   fileLabel: ".deb package", url: "https://github.com/Abhiraj1121/music/releases/download/Cognoproject/cognix-3d-audio-visualizer_3.0.0_amd64.deb" },
     ],
   },
+   {
+    id: "gesture-lab",
+    name: "Gesture Lab",
+    tagline: "Core Ecosystem App",
+    description: "Advance app control by finger.",
+    version: "v1.0.0",
+    icon: "photo/favicon.jpg",
+    iconFallbackText: "GL",
+    platforms: [
+      { os: "windows", label: "Windows", fileLabel: "Setup .exe", url: "https://github.com/cognixstudio/exibition/releases/download/Exibition/Gesture-Lab-Installer-v1.0.0-exe.zip" },
+    ],
+  },
   
 ];
 
