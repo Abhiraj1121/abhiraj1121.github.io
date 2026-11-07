@@ -1,5 +1,5 @@
 /* ============================================================
-   Cognix Store — app catalog
+   Cognix App Store — app catalog
    ------------------------------------------------------------
    TO ADD A NEW APP: copy one object in the APPS array below and
    edit its fields. TO UPDATE A LINK: just change the url string
@@ -94,133 +94,211 @@ const OS_ICONS = {
   macos: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 2.3c.1 1-.3 2-.9 2.8-.6.7-1.6 1.3-2.6 1.2-.1-1 .4-2 .9-2.7.6-.8 1.7-1.3 2.6-1.3ZM20 17.1c-.5 1.2-.8 1.7-1.5 2.7-1 1.4-2.3 3.2-4 3.2-1.5 0-1.9-1-3.9-1s-2.5 1-3.9 1c-1.7 0-3-1.6-4-3-1.8-2.6-3.1-7.3-1.3-10.5.9-1.6 2.5-2.6 4.2-2.6 1.4 0 2.3 1 3.9 1 1.4 0 2.1-1 3.9-1 1.6 0 3.2.9 4.2 2.4-1.5.9-2.4 2.5-2.4 4.2 0 2.1 1.3 3.1 1.8 3.6Z"/></svg>`,
 };
 
-/* ---------- rendering ---------- */
+/* ---------- helpers ---------- */
 
-function renderApps() {
-  const grid = document.getElementById("appGrid");
-  const countEl = document.getElementById("storeResultCount");
-  if (!grid) return;
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const osName = (o) => (o ? o[0].toUpperCase() + o.slice(1) : "");
+const appOSList = (app) => [...new Set(app.platforms.map((p) => p.os))];
+const iconHTML = (app, size) => `
+  <img src="${esc(app.icon)}" alt="" width="${size}" height="${size}" loading="lazy"
+       onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'icon-fallback',textContent:${JSON.stringify(app.iconFallbackText || "?")}}));">`;
 
-  grid.innerHTML = APPS.map(appCardHTML).join("");
-  if (countEl) countEl.textContent = `${APPS.length} app${APPS.length === 1 ? "" : "s"}`;
+/* ---------- state ---------- */
+
+let activeOS = "all";
+let query = "";
+
+/* ---------- hero stats ---------- */
+
+function renderStats() {
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set("statApps", APPS.length);
+  set("statPlatforms", new Set(APPS.flatMap(appOSList)).size);
+  set("statFiles", APPS.reduce((n, a) => n + a.platforms.length, 0));
 }
 
-function appCardHTML(app) {
-  const platformButtons = app.platforms
-    .map(
-      (p) => `
-      <a class="dl-btn" href="${p.url}" data-os="${p.os}" download>
-        <span class="dl-btn__icon">${OS_ICONS[p.os] || ""}</span>
-        <span class="dl-btn__text">
-          <span class="dl-btn__os">${p.label}</span>
-          <span class="dl-btn__file">${p.fileLabel}</span>
-        </span>
-        <svg class="dl-btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0 5-5m-5 5-5-5M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>`
-    )
-    .join("");
+/* ---------- featured spotlight (first app, or one with featured: true) ---------- */
 
-  const searchable = [app.name, app.tagline, ...app.platforms.map((p) => p.label)]
-    .join(" ")
-    .toLowerCase();
-
-  return `
-    <article class="app-card" data-name="${searchable}">
-      <div class="app-card__head">
-        <span class="app-card__icon">
-          <img src="${app.icon}" alt="" width="52" height="52"
-               onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'app-card__icon-fallback',textContent:'${app.iconFallbackText || "?"}'}));">
-        </span>
-        <div class="app-card__title-block">
-          <h2 class="app-card__title">${app.name}</h2>
-          <p class="app-card__tagline">${app.tagline}</p>
-        </div>
-        <span class="app-card__version">${app.version}</span>
+function renderFeatured() {
+  const box = document.getElementById("featured");
+  if (!box) return;
+  const app = APPS.find((a) => a.featured) || APPS[0];
+  if (!app) { box.hidden = true; return; }
+  box.innerHTML = `
+    <div class="featured__glow" aria-hidden="true"></div>
+    <div class="featured__icon">${iconHTML(app, 112)}</div>
+    <div class="featured__body">
+      <span class="featured__badge">★ Featured</span>
+      <h2 class="featured__title">${esc(app.name)}</h2>
+      <p class="featured__tagline">${esc(app.tagline)}</p>
+      <p class="featured__desc">${esc(app.description)}</p>
+      <div class="featured__actions">
+        <button type="button" class="get-btn get-btn--lg" data-open="${esc(app.id)}">Get ${esc(app.name)}</button>
+        <span class="os-row">${appOSList(app).map((o) => `<span class="os-pill" title="${osName(o)}">${OS_ICONS[o] || ""}${osName(o)}</span>`).join("")}</span>
+        <span class="ver">${esc(app.version)}</span>
       </div>
-      <p class="app-card__desc">${app.description}</p>
-      <div class="dl-grid">${platformButtons}</div>
+    </div>`;
+}
+
+/* ---------- app tiles ---------- */
+
+function appCardHTML(app) {
+  const oses = appOSList(app);
+  const searchable = [app.name, app.tagline, app.description, ...app.platforms.map((p) => p.label + " " + p.fileLabel)].join(" ").toLowerCase();
+  return `
+    <article class="app-card tile" data-id="${esc(app.id)}" data-name="${esc(searchable)}" data-os="${oses.join(" ")}">
+      <div class="tile__top">
+        <span class="tile__icon">${iconHTML(app, 72)}</span>
+        <span class="ver">${esc(app.version)}</span>
+      </div>
+      <div class="tile__body">
+        <h3 class="tile__title">${esc(app.name)}</h3>
+        <p class="tile__tagline">${esc(app.tagline)}</p>
+        <p class="tile__desc">${esc(app.description)}</p>
+      </div>
+      <div class="tile__foot">
+        <span class="os-icons">${oses.map((o) => `<span class="os-icon" title="${osName(o)}">${OS_ICONS[o] || ""}</span>`).join("")}</span>
+        <button type="button" class="get-btn" data-open="${esc(app.id)}" aria-label="Get ${esc(app.name)}">Get</button>
+      </div>
     </article>`;
 }
 
-/* ---------- platform filter chips ---------- */
+function renderApps() {
+  const grid = document.getElementById("appGrid");
+  if (!grid) return;
+  grid.innerHTML = APPS.map(appCardHTML).join("");
+  grid.querySelectorAll(".app-card").forEach((c, i) => c.style.setProperty("--stagger", i));
+}
 
-let activeOS = "all";
+/* ---------- platform filter chips (with counts) ---------- */
 
 function setupFilters() {
   const wrap = document.getElementById("filters");
   if (!wrap) return;
-  const oses = ["all", ...new Set(APPS.flatMap((a) => a.platforms.map((p) => p.os)))];
+  const oses = ["all", ...new Set(APPS.flatMap(appOSList))];
+  const count = (o) => (o === "all" ? APPS.length : APPS.filter((a) => appOSList(a).includes(o)).length);
   wrap.innerHTML = oses
-    .map((o) => `<button type="button" class="filter${o === "all" ? " is-active" : ""}" data-os="${o}">${o === "all" ? "All" : (OS_ICONS[o] || "") + o[0].toUpperCase() + o.slice(1)}</button>`)
+    .map((o) => `<button type="button" class="filter${o === "all" ? " is-active" : ""}" data-os="${o}">${o === "all" ? "All apps" : (OS_ICONS[o] || "") + osName(o)}<span class="filter__n">${count(o)}</span></button>`)
     .join("");
   wrap.addEventListener("click", (e) => {
     const b = e.target.closest(".filter");
     if (!b) return;
     activeOS = b.dataset.os;
     wrap.querySelectorAll(".filter").forEach((f) => f.classList.toggle("is-active", f === b));
-    document.getElementById("storeSearch").dispatchEvent(new Event("input"));
+    applyFilters();
   });
 }
 
-/* ---------- search filter (mirrors launchpad behavior) ---------- */
+/* ---------- search + filter ---------- */
 
-function setupStoreSearch() {
-  const input = document.getElementById("storeSearch");
+function applyFilters() {
   const countEl = document.getElementById("storeResultCount");
   const emptyState = document.getElementById("storeEmptyState");
   const emptyQuery = document.getElementById("storeEmptyQuery");
+  const featured = document.getElementById("featured");
+  let visible = 0;
+
+  document.querySelectorAll(".app-card").forEach((card) => {
+    const okQuery = query === "" || (card.dataset.name || "").includes(query);
+    const okOS = activeOS === "all" || (card.dataset.os || "").split(" ").includes(activeOS);
+    const show = okQuery && okOS;
+    card.style.display = show ? "" : "none";
+    if (show) visible++;
+  });
+
+  if (featured) featured.style.display = query === "" && activeOS === "all" ? "" : "none";
+  if (countEl) countEl.textContent = `${visible} app${visible === 1 ? "" : "s"}`;
+  if (emptyState) {
+    emptyState.hidden = visible !== 0;
+    if (emptyQuery) emptyQuery.textContent = query || osName(activeOS);
+  }
+}
+
+function setupStoreSearch() {
+  const input = document.getElementById("storeSearch");
   if (!input) return;
+  input.addEventListener("input", () => { query = input.value.trim().toLowerCase(); applyFilters(); });
+  document.addEventListener("keydown", (e) => {
+    const tag = document.activeElement && document.activeElement.tagName;
+    if (e.key === "/" && tag !== "INPUT" && tag !== "TEXTAREA") { e.preventDefault(); input.focus(); }
+    if (e.key === "Escape" && document.activeElement === input) { input.value = ""; query = ""; applyFilters(); input.blur(); }
+  });
+  applyFilters();
+}
 
-  const run = () => {
-    const query = input.value.trim().toLowerCase();
-    const cards = Array.from(document.querySelectorAll(".app-card"));
-    let visible = 0;
+/* ---------- detail sheet (all download options for one app) ---------- */
 
-    cards.forEach((card) => {
-      const hay = card.dataset.name || "";
-      const match = (query === "" || hay.includes(query)) && (activeOS === "all" || hay.includes(activeOS));
-      card.style.display = match ? "" : "none";
-      if (match) visible++;
-    });
+function setupSheet() {
+  const dlg = document.getElementById("appSheet");
+  const content = document.getElementById("sheetContent");
+  if (!dlg || !content) return;
 
-    if (countEl) countEl.textContent = `${visible} app${visible === 1 ? "" : "s"}`;
-
-    if (emptyState) {
-      if (visible === 0 && query !== "") {
-        emptyState.hidden = false;
-        if (emptyQuery) emptyQuery.textContent = input.value.trim();
-      } else {
-        emptyState.hidden = true;
-      }
-    }
+  const open = (id) => {
+    const app = APPS.find((a) => a.id === id);
+    if (!app) return;
+    content.innerHTML = `
+      <div class="sheet__head">
+        <span class="sheet__icon">${iconHTML(app, 84)}</span>
+        <div class="sheet__title-block">
+          <h2 class="sheet__title" id="sheetTitle">${esc(app.name)}</h2>
+          <p class="sheet__tagline">${esc(app.tagline)}</p>
+          <span class="ver">${esc(app.version)}</span>
+        </div>
+      </div>
+      <p class="sheet__desc">${esc(app.description)}</p>
+      <h3 class="sheet__sub">Choose your download</h3>
+      <div class="dl-list">
+        ${app.platforms.map((p) => `
+          <a class="dl-btn" href="${esc(p.url)}" data-os="${esc(p.os)}" download>
+            <span class="dl-btn__icon">${OS_ICONS[p.os] || ""}</span>
+            <span class="dl-btn__text">
+              <span class="dl-btn__os">${esc(p.label)}</span>
+              <span class="dl-btn__file">${esc(p.fileLabel)}</span>
+            </span>
+            <svg class="dl-btn__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v13m0 0 5-5m-5 5-5-5M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>`).join("")}
+      </div>`;
+    if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
+    document.body.classList.add("sheet-open");
   };
+  const close = () => { dlg.close ? dlg.close() : dlg.removeAttribute("open"); };
 
-  input.addEventListener("input", run);
-  run();
+  document.addEventListener("click", (e) => {
+    const opener = e.target.closest("[data-open]");
+    if (opener) { open(opener.dataset.open); return; }
+    if (e.target.closest("[data-close]") || e.target === dlg) close();
+    const dl = e.target.closest(".dl-btn");
+    if (dl) feedback(dl);
+  });
+  dlg.addEventListener("close", () => document.body.classList.remove("sheet-open"));
+
+  /* clicking anywhere on a tile (not just Get) opens it too */
+  document.getElementById("appGrid").addEventListener("click", (e) => {
+    if (e.target.closest("[data-open]")) return;
+    const card = e.target.closest(".app-card");
+    if (card) open(card.dataset.id);
+  });
 }
 
 /* ---------- download click feedback ---------- */
 
-function setupDownloadFeedback() {
-  document.querySelectorAll(".dl-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (!btn.getAttribute("href")) return;
-      btn.classList.add("is-downloading");
-      const fileEl = btn.querySelector(".dl-btn__file");
-      const original = fileEl ? fileEl.textContent : "";
-      if (fileEl) fileEl.textContent = "Starting download…";
-      setTimeout(() => {
-        btn.classList.remove("is-downloading");
-        if (fileEl) fileEl.textContent = original;
-      }, 2200);
-    });
-  });
+function feedback(btn) {
+  if (!btn.getAttribute("href")) return;
+  btn.classList.add("is-downloading");
+  const fileEl = btn.querySelector(".dl-btn__file");
+  const original = fileEl ? fileEl.textContent : "";
+  if (fileEl) fileEl.textContent = "Starting download…";
+  setTimeout(() => {
+    btn.classList.remove("is-downloading");
+    if (fileEl) fileEl.textContent = original;
+  }, 2200);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  renderStats();
+  renderFeatured();
   renderApps();
   setupFilters();
   setupStoreSearch();
-  document.querySelectorAll(".app-card").forEach((c, i) => c.style.setProperty("--stagger", i));
-  setupDownloadFeedback();
+  setupSheet();
 });

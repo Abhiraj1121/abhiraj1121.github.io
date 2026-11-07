@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cognix Store — abhiraj1121</title>
-<meta name="description" content="Download Cognix Studio apps directly — NovaBoard and more, for Windows, Linux and Android.">
+<title>Cognix App Store — abhiraj1121</title>
+<meta name="description" content="Cognix App Store — download Cognix Studio apps directly for Windows, Linux and Android.">
 <meta name="theme-color" content="#0b0a12">
 <link rel="icon" type="image/jpeg" href="photo/cognix.jpg">
 <link rel="apple-touch-icon" href="photo/cognix.jpg">
@@ -38,7 +38,7 @@ window.__iconFallback=function(l){var m={mini:"EM",ai:"AI",about:"AM"},e=documen
   <div class="loader__info">
     <span class="loader__pct"><span id="loaderPct">0</span>%</span>
     <div class="loader__bar"><div class="loader__bar-fill" id="loaderBar"></div></div>
-    <span class="loader__label">Opening store</span>
+    <span class="loader__label">Opening App Store</span>
   </div>
 </div>
 
@@ -62,31 +62,40 @@ window.__iconFallback=function(l){var m={mini:"EM",ai:"AI",about:"AM"},e=documen
 </nav>
 <main class="shell">
 
-  <header class="hero" id="top">
-    <div class="hero__text">
-      <p class="kicker">Cognix Store</p>
-      <h1 class="hero__name"><span>Direct</span><span class="sep" aria-hidden="true">/</span><span class="studio">Downloads</span></h1>
-      <div class="chips">
-        <span class="chip" role="status"><span class="status-dot" aria-hidden="true"></span>Releases Live</span>
-        <span class="chip"><span class="clock" id="clock" aria-hidden="true"></span></span>
-      </div>
+  <!-- ============ Hero ============ -->
+  <header class="store-hero" id="top">
+    <div class="store-hero__glow" aria-hidden="true"></div>
+    <img class="store-hero__logo" src="photo/cognix.jpg" alt="Cognix App Store" width="88" height="88"
+         onerror="this.onerror=null;var f=window.__fallbackAvatar();f.textContent='C';f.style.cssText='width:88px;height:88px;font-size:30px';this.replaceWith(f);">
+    <p class="kicker">Cognix Studio</p>
+    <h1 class="store-hero__name">Cognix <span class="studio">App Store</span></h1>
+    <p class="store-hero__sub">Every Cognix app in one place. Pick your platform, tap download — no repo browsing required.</p>
+    <div class="stats">
+      <div class="stat"><b id="statApps">0</b><span>Apps</span></div>
+      <div class="stat"><b id="statPlatforms">0</b><span>Platforms</span></div>
+      <div class="stat"><b id="statFiles">0</b><span>Downloads</span></div>
     </div>
-    <div class="hero__portrait" style="justify-self:end">
-      <img class="hero__avatar" src="photo/cognix.jpg" alt="Cognix Store" width="104" height="104"
-           onerror="this.onerror=null;var f=window.__fallbackAvatar();f.textContent='C';this.replaceWith(f);">
+    <div class="chips">
+      <span class="chip" role="status"><span class="status-dot" aria-hidden="true"></span>Releases Live</span>
+      <span class="chip"><span class="clock" id="clock" aria-hidden="true"></span></span>
     </div>
   </header>
 
-  <section class="console" aria-label="App search">
+  <section class="console" aria-label="Browse apps">
     <div class="console__bar">
       <label class="console__label" for="storeSearch">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </label>
-      <input type="text" id="storeSearch" class="console__input" placeholder="Search apps — try 'novaboard', 'windows'…" autocomplete="off" spellcheck="false" aria-controls="appGrid">
+      <input type="text" id="storeSearch" class="console__input" placeholder="Search apps, platforms…  (press /)" autocomplete="off" spellcheck="false" aria-controls="appGrid">
       <span class="console__count" id="storeResultCount" aria-live="polite">0 apps</span>
     </div>
 
     <div class="filters" id="filters" role="group" aria-label="Filter by platform"></div>
+
+    <!-- Featured app renders here via store.js -->
+    <section class="featured" id="featured" aria-label="Featured app"></section>
+
+    <div class="section-head"><h2>All apps</h2><span>Tap an app to see every download</span></div>
 
     <!-- App cards render here via store.js, from the APPS array -->
     <div class="app-grid" id="appGrid"></div>
@@ -97,10 +106,18 @@ window.__iconFallback=function(l){var m={mini:"EM",ai:"AI",about:"AM"},e=documen
   <footer class="site-footer">
     <span>© <span id="year"></span> abhiraj1121 / Cognix Studio</span>
     <span class="site-footer__dot" aria-hidden="true">•</span>
-    <span>Direct downloads, no repo browsing required</span>
+    <span>Cognix App Store — direct downloads</span>
   </footer>
 
 </main>
+
+<!-- ============ App detail sheet ============ -->
+<dialog class="sheet" id="appSheet" aria-labelledby="sheetTitle">
+  <button type="button" class="sheet__close icon-btn" data-close aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
+  <div id="sheetContent"></div>
+</dialog>
 
 <script src="script.js"></script>
 <script src="store.js"></script>
