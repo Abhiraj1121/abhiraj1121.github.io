@@ -58,7 +58,7 @@ const APPS = [
    ],
   },
    {
-    id: "LAN HUB",
+    id: "LAN HUB HOST",
     name: "LAN HOST",
     tagline: "Core Ecosystem App",
     description: "Local hosting made easy.",
