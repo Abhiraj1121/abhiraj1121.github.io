@@ -51,9 +51,23 @@ const APPS = [
     icon: "photo/lanhost.png",
     iconFallbackText: "LH",
     platforms: [
+      { os: "windows", label: "Windows", fileLabel: "Setup .exe", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-viewer-1.0.0-win-x64.zip" },
+      { os: "linux",   label: "Linux",   fileLabel: ".deb package", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-viewer-1.0.0-linux-amd64.deb" },
+      { os: "linux", label:"Linux", fileLabel: ".AppImage", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-viewer-1.0.0-linux-x86_64.AppImage" },
+      { os: "android", label:"Android", fileLabel : ".apk", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-viewer-0.0.0-dev-android.apk" },
+  },
+   {
+    id: "LAN HUB",
+    name: "LAN VIEWER",
+    tagline: "Core Ecosystem App",
+    description: "Local hosting made easy.",
+    version: "v1.0.0",
+    icon: "photo/lanview.png",
+    iconFallbackText: "LV",
+    platforms: [
       { os: "windows", label: "Windows", fileLabel: "Setup .exe", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-host-1.0.0-win-x64.zip" },
       { os: "linux",   label: "Linux",   fileLabel: ".deb package", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-host-1.0.0-linux-amd64.deb" },
-      { os: "linux", label:"Linux", filelabel: ".AppImage", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-host-1.0.0-linux-x86_64.AppImage"},
+      { os: "linux", label:"Linux", fileLabel: ".AppImage", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-host-1.0.0-linux-x86_64.AppImage"},
     ],
   },
 
