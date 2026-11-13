@@ -42,6 +42,20 @@ const APPS = [
        }
     ],
   },
+   {
+    id: "LAN HUB",
+    name: "LAN HOST",
+    tagline: "Core Ecosystem App",
+    description: "Local hosting made easy.",
+    version: "v1.0.0",
+    icon: "photo/lanhost.png",
+    iconFallbackText: "LH",
+    platforms: [
+      { os: "windows", label: "Windows", fileLabel: "Setup .exe", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-host-1.0.0-win-x64.zip" },
+      { os: "linux",   label: "Linux",   fileLabel: ".deb package", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-host-1.0.0-linux-amd64.deb" },
+      { os: "linux", label:"Linux", filelabel: ".AppImage", url: "https://github.com/cognixstudio/lan-hub/releases/download/LAB-HUB/lan-host-1.0.0-linux-x86_64.AppImage"},
+    ],
+  },
 
   // Example — EKA, once builds exist. Copy, uncomment, and fill in real URLs:
   {
